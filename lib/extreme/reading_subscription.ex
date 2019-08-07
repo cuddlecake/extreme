@@ -116,8 +116,6 @@ defmodule Extreme.ReadingSubscription do
   end
 
   defp _process_read_response({:ok, %Msg.ReadStreamEventsCompleted{} = response}, state) do
-    Logger.debug(fn -> "Last read event: #{inspect(response.next_event_number - 1)}" end)
-
     response.events
     |> Enum.each(&Shared.on_event(state.subscriber, &1, state.read_params.ack_timeout))
 
@@ -141,7 +139,6 @@ defmodule Extreme.ReadingSubscription do
   end
 
   defp _send_next_request(next_event_number, state) do
-    Logger.debug(fn -> "Reading new batch of events #{inspect(state.read_params)}" end)
     GenServer.cast(self(), :read_events)
     %{state | read_params: %{state.read_params | from_event_number: next_event_number}}
   end

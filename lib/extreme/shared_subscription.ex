@@ -21,10 +21,6 @@ defmodule Extreme.SharedSubscription do
       state.base_name
       |> RequestManager.execute(message, state.correlation_id)
 
-    Logger.debug(fn ->
-      "Successfully subscribed to stream #{inspect(subscription_confirmation)}"
-    end)
-
     {:ok, subscription_confirmation}
   end
 
