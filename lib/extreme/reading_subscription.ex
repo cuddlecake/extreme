@@ -100,6 +100,7 @@ defmodule Extreme.ReadingSubscription do
     {:noreply, %{state | status: :subscribed, buffered_messages: []}}
   end
 
+
   defp _process_read_response({:error, :stream_deleted, _}, state) do
     Logger.error(fn -> "Stream is hard deleted" end)
 
@@ -124,6 +125,11 @@ defmodule Extreme.ReadingSubscription do
       |> _send_next_request(state)
 
     {:noreply, state}
+  end
+
+  defp _process_read_response({:error, :error, %{error: "maxCount should be positive.\nParameter name: maxCount"}}, state) do
+    {:extreme, :warn, :max_count_illegal, state.read_params.stream}
+    |> _caught_up(state)
   end
 
   defp _caught_up(message, state) do
