@@ -24,3 +24,7 @@ extra-*.tar
 
 # asdf settings
 .tool-versions*
+
+# IntelliJ
+.idea
+*.iml
