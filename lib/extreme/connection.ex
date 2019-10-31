@@ -43,6 +43,9 @@ defmodule Extreme.Connection do
           |> Configuration.get_connection_name()
           |> RequestManager.identify_client(state.base_name)
 
+        DynamicSupervisor.stop(Module.concat(state.base_name, SubscriptionsSupervisor), {:shutdown, :eventstore_connected})
+
+
         {:noreply, %State{state | socket: socket}}
 
       error ->
