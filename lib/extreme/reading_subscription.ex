@@ -128,8 +128,7 @@ defmodule Extreme.ReadingSubscription do
   end
 
   defp _process_read_response({:error, :error, %{error: "maxCount should be positive.\nParameter name: maxCount"}}, state) do
-    {:extreme, :warn, :max_count_illegal, state.read_params.stream}
-    |> _caught_up(state)
+    {:stop, {:shutdown, :retry_later}, state}
   end
 
   defp _caught_up(message, state) do
